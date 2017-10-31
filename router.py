@@ -43,7 +43,7 @@ def handleARP(aData):
     response[20:22] = opCode
     response[22:28] = ourMAC
     response[28:32] = srcIP
-    response[32:38] = tarMAC
+    response[32:38] = ethDst
     response[38:42] = tarIP
 
     sendStr = ''.join(str(s) for s in response)

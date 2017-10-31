@@ -31,7 +31,7 @@ def handleARP(aData):
     ethDst = aData[6:12]
     srcIP = aData[38:42]
     ourMAC = htobl(ROUTER_MAC)
-    ethType = htobl(ARP_PACKET_TYPE)
+    ethType = htobl('0x0806') #Hardcoded to prevent odd-hexval
     opCode = htobl('0x0002')
     tarIP = htobl('0x0a010003') #TODO Change to dynamic
 

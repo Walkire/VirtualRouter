@@ -1,4 +1,6 @@
 #!/usr/bin/env python2
+import sys
+
 """itobl
 Converts an integer to a byte list
 
@@ -31,7 +33,10 @@ Converts a byte list to a hex number with the '0x'
 @return {Hex} Hex value created
 """
 def bltoh(value):
+    binaryStr = ''
     byteString = ''.join(str(s) for s in value)
-    intValue = int(byteString, 2)
+    for char in byteString:
+        binaryStr += '{0:08b}'.format(ord(char))
+    intValue = int(binaryStr, 2)
     hexValue = hex(intValue)
     return hexValue

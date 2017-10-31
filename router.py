@@ -97,7 +97,7 @@ def checksum(msg):
     result = utils.itobl(~s & 0xffff)
     return result[::-1] #Reverses List
 
-def handlePacket(dataReceived):
+def decodePacket(dataReceived):
     global BROADCAST
     global ARP_PACKET_TYPE
     global ICMP_PACKET_TYPE
@@ -150,7 +150,7 @@ def main():
 
     while True:
         dataReceived, address = SOCKFD.recvfrom(1024)
-        print("Got a {0} byte packet from {1}:{2}".format(len(data_received), address[0], address[1]))
+        print("Got a {0} byte packet from {1}:{2}".format(len(dataReceived), address[0], address[1]))
         decodePacket(dataReceived)
 
 

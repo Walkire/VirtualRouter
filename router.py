@@ -30,10 +30,10 @@ def handleARP(aData):
     tarMAC = aData[0:6]
     ethDst = aData[6:12]
     srcIP = aData[38:42]
-    ourMAC = utils.htobl(ROUTER_MAC)
-    ethType = utils.htobl(ARP_PACKET_TYPE)
-    opCode = utils.htobl('0x0002')
-    tarIP = utils.htobl('0x0a010003') #TODO Change to dynamic
+    ourMAC = htobl(ROUTER_MAC)
+    ethType = htobl(ARP_PACKET_TYPE)
+    opCode = htobl('0x0002')
+    tarIP = htobl('0x0a010003') #TODO Change to dynamic
 
     #replace with new values
     response = aData
@@ -57,9 +57,9 @@ def handleICMP(aData):
     #Break apart ICMP request
     ethDst = aData[6:12]
     srcIP = aData[30:34]
-    ourMAC = utils.htobl(ROUTER_MAC)
-    tarIP = utils.htobl('0x0a010003') #TODO Change to dynamic
-    zero = utils.htobl('0x00')
+    ourMAC = htobl(ROUTER_MAC)
+    tarIP = htobl('0x0a010003') #TODO Change to dynamic
+    zero = htobl('0x00')
 
     #replace with new values
     response = aData
@@ -70,7 +70,7 @@ def handleICMP(aData):
     response[34] = zero
 
     #checksum
-    response[24:26] = utils.htobl('0x0000')
+    response[24:26] = htobl('0x0000')
     ipHeader = ''.join(response[14:34])
     response[24:26] = checksum(ipHeader)
 
@@ -94,7 +94,7 @@ def checksum(msg):
         w = ord(msg[i]) + (ord(msg[i+1]) << 8)
         s = carry_around_add(s, w)
 
-    result = utils.itobl(~s & 0xffff)
+    result = itobl(~s & 0xffff)
     return result[::-1] #Reverses List
 
 def decodePacket(dataReceived):
@@ -104,8 +104,8 @@ def decodePacket(dataReceived):
     global ROUTER_MAC
 
     aData = list(dataReceived) #Array(list) of all byte characters
-    destination = utils.bltoh(aData[0:6])
-    packetType = utils.bltoh(aData[12:14])
+    destination = bltoh(aData[0:6])
+    packetType = bltoh(aData[12:14])
 
     if destination == ROUTER_MAC or destination == BROADCAST:
         #this packet is for us

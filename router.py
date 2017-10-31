@@ -59,7 +59,7 @@ def handleICMP(aData):
     srcIP = aData[30:34]
     ourMAC = htobl(ROUTER_MAC)
     tarIP = htobl('0x0a010003') #TODO Change to dynamic
-    zero = htobl('0x00')
+    zero = htobl('0x00')[0]
 
     #replace with new values
     response = aData
@@ -74,9 +74,8 @@ def handleICMP(aData):
     ipHeader = ''.join(response[14:34])
     response[24:26] = checksum(ipHeader)
 
-    sendStr = ''.join(response)
+    sendStr = ''.join(str(s) for s in response)
     SOCKFD.send(sendStr)
-
     print("Sent ICMP response")
 
 

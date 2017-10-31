@@ -74,7 +74,7 @@ def handleICMP(aData):
     ipHeader = ''.join(response[14:34])
     response[24:26] = checksum(ipHeader)
 
-    sendStr = ''.join(str(s) for s in response)
+    sendStr = ''.join(response)
     SOCKFD.send(sendStr)
 
     print("Sent ICMP response")

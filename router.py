@@ -23,7 +23,22 @@ ICMP_PACKET_TYPE = '0x800'
 ROUTER_MAC = hex(get_mac())[:-1]
 SOCKFD = 0
 
-def handleARP(aData):
+LOOUP_TABLE_R1 = {
+    '10.0.0.0/16':'r1-eth0',
+    '10.1.0.0/24':'r1-eth1',
+    '10.1.1.0/24':'r1-eth2',
+    '10.3.0.0/16': 'r1-eth0'
+}
+
+LOOUP_TABLE_R2 = {
+    '10.0.0.0/16':'r2-eth0',
+    '10.3.0.0/24':'r2-eth1',
+    '10.3.1.0/24':'r2-eth2',
+    '10.3.4.0/24':'r2-eth3',
+    '10.1.0.0/16':'r2-eth0'
+}
+
+def ARPresponse(aData):
     print("ARP Packet found, building response")
 
     #Break apart ARP request
@@ -31,7 +46,7 @@ def handleARP(aData):
     ethDst = aData[6:12]
     srcIP = aData[38:42]
     ourMAC = htobl(ROUTER_MAC)
-    ethType = htobl('0x0806') #Hardcoded to prevent odd-hexval
+    ethType = htobl(ARP_PACKET_TYPE)
     opCode = htobl('0x0002')
     tarIP = htobl('0x0a010003') #TODO Change to dynamic
 
@@ -51,7 +66,7 @@ def handleARP(aData):
 
     print("Sent ARP response")
 
-def handleICMP(aData):
+def ICMPresponse(aData):
     print("ICMP Packet found, building response")
 
     #Break apart ICMP request
@@ -78,6 +93,16 @@ def handleICMP(aData):
     SOCKFD.send(sendStr)
     print("Sent ICMP response")
 
+def ARPforward(aData):
+    print("Forward ARP")
+
+def ICMPforward(aData):
+    print("Forward ICMP")
+
+def lookup():
+    global LOOUP_TABLE_R1
+    global LOOUP_TABLE_R2
+    print("Loopup table")
 
 #@Author Kevin Jacobs
 #http://bit.ly/2gQPkT9
@@ -109,9 +134,15 @@ def decodePacket(dataReceived):
     if destination == ROUTER_MAC or destination == BROADCAST:
         #this packet is for us
         if packetType == ARP_PACKET_TYPE:
-            handleARP(aData)
+            ARPresponse(aData)
         elif packetType == ICMP_PACKET_TYPE:
-            handleICMP(aData)
+            ICMPresponse(aData)
+    else:
+        #this packet is for another
+        if packetType == ARP_PACKET_TYPE:
+            ARPforward(aData)
+        elif packetType = ICMP_PACKET_TYPE:
+            ICMPforward(aData)
 
 def main():
     global ETH_P_ALL

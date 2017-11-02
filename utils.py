@@ -16,12 +16,16 @@ def itobl(value):
 """htobl
 Converts a hex value (with or without the '0x') to a ByteList
 
-@param {Hex} value - hex value
+@param {Hex} value - hex value (does not need to be an even value)
 @return {ByteList} Byte List created
 """
 def htobl(value):
+    #Removes 0x if exists
     if value[1] == 'x':
         value = value[2:]
+    #Adds 0 to beginning if an odd number of values
+    if len(value) % 2 == 1:
+        value = '0'+value
 
     byteList = list(value.decode("hex"))
     return byteList

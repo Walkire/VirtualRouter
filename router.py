@@ -131,6 +131,11 @@ def decodePacket(dataReceived):
     destination = bltoh(aData[0:6])
     packetType = bltoh(aData[12:14])
 
+    print("destination: "+destination)
+    print("Router mac: "+ROUTER_MAC)
+    print("BROADCAST: "+BROADCAST)
+
+
     if destination == ROUTER_MAC or destination == BROADCAST:
         #this packet is for us
         if packetType == ARP_PACKET_TYPE:

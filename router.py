@@ -44,11 +44,11 @@ def ARPresponse(aData):
     #Break apart ARP request
     tarMAC = aData[0:6]
     ethDst = aData[6:12]
+    tarIP = aData[28:32]
     srcIP = aData[38:42]
     ourMAC = htobl(ROUTER_MAC)
     ethType = htobl(ARP_PACKET_TYPE)
     opCode = htobl('0x0002')
-    tarIP = htobl('0x0a010003') #TODO Change to dynamic
 
     #replace with new values
     response = aData
@@ -71,9 +71,9 @@ def ICMPresponse(aData):
 
     #Break apart ICMP request
     ethDst = aData[6:12]
+    tarIP = aData[26:30]
     srcIP = aData[30:34]
     ourMAC = htobl(ROUTER_MAC)
-    tarIP = htobl('0x0a010003') #TODO Change to dynamic
     zero = htobl('0x00')[0]
 
     #replace with new values
@@ -141,7 +141,7 @@ def decodePacket(dataReceived):
         #this packet is for another
         if packetType == ARP_PACKET_TYPE:
             ARPforward(aData)
-        elif packetType = ICMP_PACKET_TYPE:
+        elif packetType == ICMP_PACKET_TYPE:
             ICMPforward(aData)
 
 def main():
